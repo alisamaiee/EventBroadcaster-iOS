@@ -7,7 +7,7 @@
 import Foundation
 
 /// A custom lightweight event handler
-internal class EventBroadcaster {
+class EventBroadcaster {
     static let sharedInstance = EventBroadcaster()
     
     private var observers = [Int: [Weak<AnyObject>]]()
@@ -159,7 +159,7 @@ internal class EventBroadcaster {
     }
 }
 
-internal protocol EventBroadcasterDelegate: class {
+protocol EventBroadcasterDelegate: class {
     func didReceivedNotification(_ id: Int, args: [Any])
 }
 
