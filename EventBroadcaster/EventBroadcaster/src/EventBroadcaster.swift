@@ -7,8 +7,8 @@
 import Foundation
 
 /// A custom lightweight event handler
-class EventBroadcaster {
-    static let sharedInstance = EventBroadcaster()
+public class EventBroadcaster {
+    public static let sharedInstance = EventBroadcaster()
     
     private var observers = [Int: [Weak<AnyObject>]]()
     private var removeAfterBroadcast = [Int: [Weak<AnyObject>]]()
@@ -20,7 +20,7 @@ class EventBroadcaster {
     
     private var allowedNotifications: [Int]?
     
-    func setAnimationInProgress(value: Bool) {
+    public func setAnimationInProgress(value: Bool) {
         self.animationInProgress = value
         if (!animationInProgress && !self.delayedPosts.isEmpty) {
             for delayedPost in self.delayedPosts {
@@ -36,7 +36,7 @@ class EventBroadcaster {
         }
     }
     
-    func postNotificationName(_ id: Int, _ args: [Any], forceDuringAnimations: Bool = false) {
+    public func postNotificationName(_ id: Int, _ args: [Any], forceDuringAnimations: Bool = false) {
         var allowDuringAnimation = forceDuringAnimations
         if self.allowedNotifications != nil && !forceDuringAnimations {
             for allowedNotification in self.allowedNotifications! {
@@ -49,7 +49,7 @@ class EventBroadcaster {
         try? self.postNotificationNameInternal(id, allowDuringAnimation, args)
     }
     
-    func postNotificationNameInternal(_ id: Int, _ allowDuringAnimation: Bool, _ args: [Any]) throws {
+    public func postNotificationNameInternal(_ id: Int, _ allowDuringAnimation: Bool, _ args: [Any]) throws {
         if !Thread.isMainThread {
             throw RuntimeError("EventBroadcaster::postNotificationNameInternal -> allowed only from MAIN thread")
         }
@@ -102,7 +102,7 @@ class EventBroadcaster {
     }
     
     /// Don't forget to call removeObserver when your observing task is over
-    func addObserver(_ observer: AnyObject & EventBroadcasterDelegate, _ id: Int) throws {
+    public func addObserver(_ observer: AnyObject & EventBroadcasterDelegate, _ id: Int) throws {
         if !Thread.isMainThread {
             throw RuntimeError("EventBroadcaster::postNotificationNameInternal -> allowed only from MAIN thread")
         }
@@ -122,7 +122,7 @@ class EventBroadcaster {
         self.observers[id] = objects!
     }
     
-    func removeObserver(_ observer: AnyObject, _ id: Int) throws {
+    public func removeObserver(_ observer: AnyObject, _ id: Int) throws {
         if !Thread.isMainThread {
             throw RuntimeError("EventBroadcaster::postNotificationNameInternal -> allowed only from MAIN thread")
         }
@@ -150,7 +150,7 @@ class EventBroadcaster {
         }
     }
     
-    func cleanup() {
+    public func cleanup() {
         self.observers.removeAll()
         self.removeAfterBroadcast.removeAll()
         self.addAfterBroadcast.removeAll()
@@ -159,7 +159,7 @@ class EventBroadcaster {
     }
 }
 
-protocol EventBroadcasterDelegate: class {
+public protocol EventBroadcasterDelegate: class {
     func didReceivedNotification(_ id: Int, args: [Any])
 }
 
