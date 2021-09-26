@@ -1,7 +1,7 @@
 # EventBroadcaster-iOS
 EventBroadcaster is a lightweight event handler written in swift for iOS, macOS, tvOS &amp; watchOS applications.
 
-<img src="./AdvancedActionSheetExamples/ScreenShots/4.jpg?raw">
+<img src="https://d29fhpw069ctt2.cloudfront.net/icon/image/120390/preview.svg?raw">
 
 ## Cocoapods
 EventBroadcaster is available through [CocoaPods](http://cocoapods.org). Simply add the following to your Podfile:
