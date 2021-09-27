@@ -65,7 +65,7 @@ EventBroadcaster.sharedInstance.broadcastEvent(EventBroadcaster.DownloadComplete
 ```
  * Remove observer: Since EventBroadcaster holds a weak refrence of observer, you don't need to worry about memory leak but we've got an emergancy method to make sure that the observer is refrence is removed. Also you can use it when you want to stop listening to an event updates.
  ```swift
-deinit() {
+deinit {
     try? EventBroadcaster.sharedInstance.removeObserver(self, EventBroadcaster.SettingsUpdated)
     try? EventBroadcaster.sharedInstance.removeObserver(self, EventBroadcaster.DownloadCompleted)
 }
