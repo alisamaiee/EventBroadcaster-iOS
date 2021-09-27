@@ -26,7 +26,7 @@ public class EventBroadcaster {
             for delayedPost in self.delayedPosts {
                 if let strongPost = delayedPost {
                     do {
-                        try self.postNotificationNameInternal(strongPost.id, true, strongPost.args)
+                        try self.broadcastEventInternal(strongPost.id, true, strongPost.args)
                     } catch {
                         debugPrint(error.localizedDescription)
                     }
@@ -36,7 +36,7 @@ public class EventBroadcaster {
         }
     }
     
-    public func postNotificationName(_ id: Int, _ args: [Any], forceDuringAnimations: Bool = false) {
+    public func broadcastEvent(_ id: Int, _ args: [Any], forceDuringAnimations: Bool = false) {
         var allowDuringAnimation = forceDuringAnimations
         if self.allowedNotifications != nil && !forceDuringAnimations {
             for allowedNotification in self.allowedNotifications! {
@@ -46,10 +46,10 @@ public class EventBroadcaster {
                 }
             }
         }
-        try? self.postNotificationNameInternal(id, allowDuringAnimation, args)
+        try? self.broadcastEventInternal(id, allowDuringAnimation, args)
     }
     
-    public func postNotificationNameInternal(_ id: Int, _ allowDuringAnimation: Bool, _ args: [Any]) throws {
+    private func broadcastEventInternal(_ id: Int, _ allowDuringAnimation: Bool, _ args: [Any]) throws {
         if !Thread.isMainThread {
             throw RuntimeError("EventBroadcaster::postNotificationNameInternal -> allowed only from MAIN thread")
         }
