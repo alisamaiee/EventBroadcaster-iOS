@@ -51,12 +51,8 @@ Now your ViewController (or any other class that you need) is ready to observe f
 ```swift
 override func viewDidLoad() {
     super.viewDidLoad()
-    do {
-        EventBroadcaster.sharedInstance.addObserver(self, EventBroadcaster.SettingsUpdated)
-        EventBroadcaster.sharedInstance.addObserver(self, EventBroadcaster.DownloadCompleted)
-    } catch {
-        print(error)
-    }
+    EventBroadcaster.sharedInstance.addObserver(self, EventBroadcaster.SettingsUpdated)
+    EventBroadcaster.sharedInstance.addObserver(self, EventBroadcaster.DownloadCompleted)
 }
 ```
 * Broadcast event: Anyone from anywhere can broadcast any event; for example your DownloadManager wants to broadcast that a file download completed:
@@ -66,8 +62,8 @@ EventBroadcaster.sharedInstance.broadcastEvent(EventBroadcaster.DownloadComplete
  * Remove observer: Since EventBroadcaster holds a weak refrence of observer, you don't need to worry about memory leak but we've got an emergancy method to make sure that the observer is refrence is removed. Also you can use it when you want to stop listening to an event updates.
  ```swift
 deinit {
-    try? EventBroadcaster.sharedInstance.removeObserver(self, EventBroadcaster.SettingsUpdated)
-    try? EventBroadcaster.sharedInstance.removeObserver(self, EventBroadcaster.DownloadCompleted)
+    EventBroadcaster.sharedInstance.removeObserver(self, EventBroadcaster.SettingsUpdated)
+    EventBroadcaster.sharedInstance.removeObserver(self, EventBroadcaster.DownloadCompleted)
 }
 ```
 
