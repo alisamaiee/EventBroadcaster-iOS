@@ -49,10 +49,14 @@ public class EventBroadcaster {
         try? self.broadcastEventInternal(id, allowDuringAnimation, args)
     }
     
-    private func broadcastEventInternal(_ id: Int, _ allowDuringAnimation: Bool, _ args: [Any]) throws {
-        if !Thread.isMainThread {
-            throw RuntimeError("EventBroadcaster::postNotificationNameInternal -> allowed only from MAIN thread")
-        }
+    private func broadcastEventInternal(_ id: Int, _ allowDuringAnimation: Bool, _ args: [Any] {
+        #if DEBUG
+            if !Thread.isMainThread {
+                throw RuntimeError("EventBroadcaster::broadcastEventInternal -> allowed only from MAIN thread")
+            }
+        #else
+            print("EventBroadcaster::broadcastEventInternal -> allowed only from MAIN thread")
+        #endif
         
         if !allowDuringAnimation && animationInProgress {
             let delayedPost = DelayedPost(id,args)
@@ -102,10 +106,15 @@ public class EventBroadcaster {
     }
     
     /// Don't forget to call removeObserver when your observing task is over
-    public func addObserver(_ observer: AnyObject & EventBroadcasterDelegate, _ id: Int) throws {
-        if !Thread.isMainThread {
-            throw RuntimeError("EventBroadcaster::postNotificationNameInternal -> allowed only from MAIN thread")
-        }
+    public func addObserver(_ observer: AnyObject & EventBroadcasterDelegate, _ id: Int) {
+        
+        #if DEBUG
+            if !Thread.isMainThread {
+                throw RuntimeError("EventBroadcaster::addObserver -> allowed only from MAIN thread")
+            }
+        #else
+            print("EventBroadcaster::addObserver -> allowed only from MAIN thread")
+        #endif
         
         var objects = self.observers[id]
         if objects == nil {
@@ -122,10 +131,14 @@ public class EventBroadcaster {
         self.observers[id] = objects!
     }
     
-    public func removeObserver(_ observer: AnyObject, _ id: Int) throws {
-        if !Thread.isMainThread {
-            throw RuntimeError("EventBroadcaster::postNotificationNameInternal -> allowed only from MAIN thread")
-        }
+    public func removeObserver(_ observer: AnyObject, _ id: Int) {
+        #if DEBUG
+            if !Thread.isMainThread {
+                throw RuntimeError("EventBroadcaster::removeObserver -> allowed only from MAIN thread")
+            }
+        #else
+            print("EventBroadcaster::removeObserver -> allowed only from MAIN thread")
+        #endif
         
         if broadcasting != 0 {
             var arrayList = removeAfterBroadcast[id]
