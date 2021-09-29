@@ -25,11 +25,7 @@ public class EventBroadcaster {
         if (!animationInProgress && !self.delayedPosts.isEmpty) {
             for delayedPost in self.delayedPosts {
                 if let strongPost = delayedPost {
-                    do {
-                        try self.broadcastEventInternal(strongPost.id, true, strongPost.args)
-                    } catch {
-                        debugPrint(error.localizedDescription)
-                    }
+                    self.broadcastEventInternal(strongPost.id, true, strongPost.args)
                 }
             }
             delayedPosts.removeAll()
@@ -46,14 +42,14 @@ public class EventBroadcaster {
                 }
             }
         }
-        try? self.broadcastEventInternal(id, allowDuringAnimation, args)
+        self.broadcastEventInternal(id, allowDuringAnimation, args)
     }
     
-    private func broadcastEventInternal(_ id: Int, _ allowDuringAnimation: Bool, _ args: [Any] {
+    private func broadcastEventInternal(_ id: Int, _ allowDuringAnimation: Bool, _ args: [Any]) {
         #if DEBUG
-            if !Thread.isMainThread {
-                throw RuntimeError("EventBroadcaster::broadcastEventInternal -> allowed only from MAIN thread")
-            }
+        if !Thread.isMainThread {
+            fatalError("EventBroadcaster::broadcastEventInternal -> allowed only from MAIN thread")
+        }
         #else
             print("EventBroadcaster::broadcastEventInternal -> allowed only from MAIN thread")
         #endif
@@ -83,7 +79,7 @@ public class EventBroadcaster {
                     let arrayList = object.value
                     
                     for obj in arrayList {
-                        try self.removeObserver(obj, object.key)
+                        self.removeObserver(obj, object.key)
                     }
                 }
                 removeAfterBroadcast.removeAll()
@@ -97,7 +93,7 @@ public class EventBroadcaster {
                         guard let castedObj = obj as? EventBroadcasterDelegate else {
                             fatalError("EventBroadcaster:: [ERROR] postNotificationNameInternal: Unexpected observer type")
                         }
-                        try self.addObserver(castedObj, key)
+                        self.addObserver(castedObj, key)
                     }
                 }
                 addAfterBroadcast.removeAll()
@@ -107,11 +103,10 @@ public class EventBroadcaster {
     
     /// Don't forget to call removeObserver when your observing task is over
     public func addObserver(_ observer: AnyObject & EventBroadcasterDelegate, _ id: Int) {
-        
         #if DEBUG
-            if !Thread.isMainThread {
-                throw RuntimeError("EventBroadcaster::addObserver -> allowed only from MAIN thread")
-            }
+        if !Thread.isMainThread {
+            fatalError("EventBroadcaster::addObserver -> allowed only from MAIN thread")
+        }
         #else
             print("EventBroadcaster::addObserver -> allowed only from MAIN thread")
         #endif
@@ -133,9 +128,9 @@ public class EventBroadcaster {
     
     public func removeObserver(_ observer: AnyObject, _ id: Int) {
         #if DEBUG
-            if !Thread.isMainThread {
-                throw RuntimeError("EventBroadcaster::removeObserver -> allowed only from MAIN thread")
-            }
+        if !Thread.isMainThread {
+            fatalError("EventBroadcaster::removeObserver -> allowed only from MAIN thread")
+        }
         #else
             print("EventBroadcaster::removeObserver -> allowed only from MAIN thread")
         #endif
